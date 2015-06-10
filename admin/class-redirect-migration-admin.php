@@ -100,4 +100,26 @@ class Redirect_Migration_Admin {
 
 	}
 
+	public function add_plugin_page() {
+		add_menu_page(
+			'Redirect Map',
+			'Redirects',
+			'manage_options',
+			'redirect_map',
+			array( $this, 'create_admin_page' ),
+			'dashicons-admin-site',
+			81
+		);
+	}
+
+	public function create_admin_page() {
+		$maps = Redirect_Migration_Map::all();
+		
+		include('partials/redirect-migration-admin-display.php');
+	}
+
+	public function plugin_page_init() {
+
+	}
+
 }

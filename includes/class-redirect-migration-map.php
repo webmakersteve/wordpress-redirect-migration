@@ -28,9 +28,39 @@ class Redirect_Migration_Map {
 	private function __construct($data) {
 		$url_to = !empty($data['url_to']) ? $data['url_to'] : NULL;
 		$status = !empty($data['status']) ? $data['status'] : NULL;
+		$active = !empty($data['active']) ? $data['active'] : true;
+		$url_from = !empty($data['url_from']) ? $data['url_from'] : NULL;
+		$id = !empty($data['id']) ? $data['id'] : 0;
 
 		$this->to = $url_to;
 		$this->status = $status;
+		$this->ID = $id;
+		$this->active = $active;
+		$this->from = $url_from;
+	}
+
+	private static function create($data) {
+		return new self($data);
+	}
+
+	public function from() {
+		return $this->from;
+	}
+
+	public function active() {
+		return $this->active == true;
+	}
+
+	public function ID() {
+		return $this->ID;
+	}
+
+	public function to() {
+		return $this->to;
+	}
+
+	public function status() {
+		return $this->status;
 	}
 
 	private static function normalizeUrl($url) {
@@ -83,6 +113,14 @@ class Redirect_Migration_Map {
       )
     );
   }
+
+	public static function all() {
+		global $wpdb;
+		$table_name = self::tablename();
+
+		$results = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY time DESC", ARRAY_A );
+		return array_map(array(self, 'create'), $results);
+	}
 
   public static function mapFor( $url ) {
     global $wpdb;
