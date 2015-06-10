@@ -20,7 +20,7 @@
  * @subpackage redirect_migration/public
  * @author     Your Name <email@example.com>
  */
-class redirect_migration_Public {
+class Redirect_Migration_Public {
 
 	/**
 	 * The ID of this plugin.
@@ -98,6 +98,14 @@ class redirect_migration_Public {
 
 		wp_enqueue_script( $this->redirect_migration, plugin_dir_url( __FILE__ ) . 'js/redirect-migration-public.js', array( 'jquery' ), $this->version, false );
 
+	}
+
+	public function route_middleman( $wp_query ) {
+		$uri = $_SERVER['REQUEST_URI'];
+		$map = Redirect_Migration_Map::mapFor($uri);
+		if ($map instanceof Redirect_Migration_Map) {
+			$map->render();
+		}
 	}
 
 }

@@ -21,7 +21,7 @@
  * @subpackage redirect_migration/includes
  * @author     Your Name <email@example.com>
  */
-class redirect_migration_Loader {
+class Redirect_Migration_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

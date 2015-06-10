@@ -20,7 +20,7 @@
  * @subpackage redirect_migration/admin
  * @author     Your Name <email@example.com>
  */
-class redirect_migration_Admin {
+class Redirect_Migration_Admin {
 
 	/**
 	 * The ID of this plugin.

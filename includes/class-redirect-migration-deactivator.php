@@ -20,7 +20,7 @@
  * @subpackage redirect_migration/includes
  * @author     Your Name <email@example.com>
  */
-class redirect_migration_Deactivator {
+class Redirect_Migration_Deactivator {
 
 	/**
 	 * Short Description. (use period)

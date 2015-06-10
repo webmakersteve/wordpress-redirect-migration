@@ -8,17 +8,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://example.com
+ * @link              http://webmakersteve.com
  * @since             1.0.0
  * @package           redirect_migration
  *
  * @wordpress-plugin
- * Plugin Name:       WordPress Plugin Boilerplate
- * Plugin URI:        http://example.com/redirect-migration-uri/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Plugin Name:       Redirect Mapper
+ * Plugin URI:        http://webmakersteve.com/development/wordpress/redirect-mapper
+ * Description:       Plugin for WordPress to map URLs to new areas of the site with an optional fallback.
  * Version:           1.0.0
- * Author:            Your Name or Your Company
- * Author URI:        http://example.com/
+ * Author:            Stephen Parente
+ * Author URI:        http://webmakersteve.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       redirect-migration
@@ -68,7 +68,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-redirect-migration.php';
  */
 function run_redirect_migration() {
 
-	$plugin = new redirect_migration();
+	$plugin = new Redirect_Migration();
 	$plugin->run();
 
 }

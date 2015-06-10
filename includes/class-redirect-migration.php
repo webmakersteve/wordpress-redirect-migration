@@ -27,7 +27,7 @@
  * @subpackage redirect_migration/includes
  * @author     Your Name <email@example.com>
  */
-class redirect_migration {
+class Redirect_Migration {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -102,11 +102,20 @@ class redirect_migration {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-redirect-migration-loader.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/http_build_url.php';
+
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-redirect-migration-i18n.php';
+
+		/**
+		 * The class responsible for interfacing with the database
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-redirect-migration-map.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-redirect-migration-error.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -119,7 +128,8 @@ class redirect_migration {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-redirect-migration-public.php';
 
-		$this->loader = new redirect_migration_Loader();
+		// $this->map->addEntry('/home', 'http://google.com');
+		$this->loader = new Redirect_Migration_Loader();
 
 	}
 
@@ -134,7 +144,7 @@ class redirect_migration {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new redirect_migration_i18n();
+		$plugin_i18n = new Redirect_Migration_i18n();
 		$plugin_i18n->set_domain( $this->get_redirect_migration() );
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
@@ -150,7 +160,7 @@ class redirect_migration {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new redirect_migration_Admin( $this->get_redirect_migration(), $this->get_version() );
+		$plugin_admin = new Redirect_Migration_Admin( $this->get_redirect_migration(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -166,10 +176,11 @@ class redirect_migration {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new redirect_migration_Public( $this->get_redirect_migration(), $this->get_version() );
+		$plugin_public = new Redirect_Migration_Public( $this->get_redirect_migration(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'parse_query', $plugin_public, 'route_middleman' );
 
 	}
 

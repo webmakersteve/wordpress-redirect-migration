@@ -24,7 +24,7 @@
  * @subpackage redirect_migration/includes
  * @author     Your Name <email@example.com>
  */
-class redirect_migration_i18n {
+class Redirect_Migration_i18n {
 
 	/**
 	 * The domain specified for this plugin.
