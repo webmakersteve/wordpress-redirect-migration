@@ -100,6 +100,12 @@ class Redirect_Migration_Admin {
 
 	}
 
+	const _ID = 'redirect_migration';
+
+	public function print_text_input($label, $name, $type = 'text') {
+		include('partials/redirect-migration-admin-form-field.php');
+	}
+
 	public function add_plugin_page() {
 		add_menu_page(
 			'Redirect Map',
@@ -110,6 +116,64 @@ class Redirect_Migration_Admin {
 			'dashicons-admin-site',
 			81
 		);
+
+		if ($this->hasFormAction()) {
+			try {
+				if ($this->isFormAction('matrix_upload')) $this->do_matrix();
+			} catch (Redirect_Migration_Error $e) {
+				print_r($e);
+			}
+		}
+
+	}
+
+	public function do_matrix( ) {
+		$file = $_FILES[self::_ID]; //['matrix'];
+
+		$temp = $file['tmp_name']['matrix'];
+		$type = $file['type']['matrix'];
+
+		if ($type !== 'text/csv') {
+			throw new Redirect_Migration_Error('Filetype not appropriate');
+			return;
+		}
+
+		$csvData = file_get_contents($temp);
+
+		if (($handle = fopen($temp, "r")) !== FALSE) {
+			$iteration = 0;
+			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+				$iteration++;
+				if ($iteration === 1) continue;
+				
+				$x = Redirect_Migration_Map::init($data[0], $data[1]);
+
+				print_r($x);
+
+			}
+			fclose($handle);
+
+		} else {
+			throw new Redirect_Migration_Error('File cannot be read');
+			return;
+		}
+		exit;
+	}
+
+	protected function getFormAction() {
+		$action = array_key_exists('redirect_matrix_action', $_POST) ? $_POST['redirect_matrix_action'] : false;
+		return $action;
+	}
+
+	protected function hasFormAction() {
+		$action = $this->getFormAction();
+		return $action !== false;
+	}
+
+	protected function isFormAction( $action ) {
+		$formAction = $this->getFormAction();
+		if ($action === $formAction) return true;
+		return false;
 	}
 
 	public function create_admin_page() {
