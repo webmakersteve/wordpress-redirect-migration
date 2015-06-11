@@ -142,22 +142,25 @@ class Redirect_Migration_Admin {
 
 		if (($handle = fopen($temp, "r")) !== FALSE) {
 			$iteration = 0;
-			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+//			ini_set('auto_detect_line_endings', TRUE);
+
+			while (($data = fgetcsv($handle, 1000)) !== FALSE) {
 				$iteration++;
 				if ($iteration === 1) continue;
-				
 				$x = Redirect_Migration_Map::init($data[0], $data[1]);
 
-				print_r($x);
+				$x->save();
 
 			}
 			fclose($handle);
+			die((string) $iteration);
 
 		} else {
 			throw new Redirect_Migration_Error('File cannot be read');
 			return;
 		}
-		exit;
+		
 	}
 
 	protected function getFormAction() {

@@ -27,7 +27,7 @@ class Redirect_Migration_Map {
 
 	private function __construct($data) {
 		$url_to = !empty($data['url_to']) ? $data['url_to'] : NULL;
-		$status = !empty($data['status']) ? $data['status'] : NULL;
+		$status = !empty($data['status']) ? $data['status'] : 301;
 		$active = !empty($data['active']) ? $data['active'] : true;
 		$url_from = !empty($data['url_from']) ? $data['url_from'] : NULL;
 		$id = !empty($data['id']) ? $data['id'] : NULL;
@@ -43,10 +43,12 @@ class Redirect_Migration_Map {
 		return new self($data);
 	}
 
-	public static function init($url_to, $url_from) {
+	public static function init($url_from, $url_to, $status = 301) {
+
 		return new self(array(
 			'url_to' => $url_to,
-			'url_from' => $url_from
+			'url_from' => $url_from,
+			'status' => $status
 		));
 	}
 
@@ -106,19 +108,34 @@ class Redirect_Migration_Map {
 
   }
 
+  public function save() {
+  	$id = self::addEntry( $this->from, $this->to, $this->status );
+
+  	$this->active = 1;
+  	$this->ID = $id;
+  	$this->from = self::normalizeUrl($this->from);
+  }
+
   public static function addEntry( $url, $maps_to = '/', $status = 301 ) {
     global $wpdb;
+    $wpdb->show_errors();
 
-    $wpdb->insert(
-      self::tablename(),
-      array(
+    $data = array(
       	'time' => current_time( 'mysql' ),
       	'url_from' => self::normalizeUrl($url),
       	'url_to' => $maps_to,
         'status' => $status,
         'active' => 1
-      )
+      );
+
+    $wpdb->insert(
+      self::tablename(),
+      $data
     );
+    $id = $wpdb->insert_id;
+
+    return $id;
+
   }
 
 	public static function all() {
@@ -134,7 +151,7 @@ class Redirect_Migration_Map {
 
 		$url = self::normalizeUrl($url);
 
-	$results = $wpdb->get_results( self::getURLEntry($url) , ARRAY_A ); // Associative array
+		$results = $wpdb->get_results( self::getURLEntry($url) , ARRAY_A ); // Associative array
 
 		if (count($results) > 0) {
 			$result = $results[0];
