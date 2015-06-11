@@ -154,7 +154,6 @@ class Redirect_Migration_Admin {
 
 			}
 			fclose($handle);
-			die((string) $iteration);
 
 		} else {
 			throw new Redirect_Migration_Error('File cannot be read');
