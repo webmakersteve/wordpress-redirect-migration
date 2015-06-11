@@ -144,15 +144,18 @@ class Redirect_Migration_Admin {
 			$iteration = 0;
 
 //			ini_set('auto_detect_line_endings', TRUE);
+			$mappings = array();
 
 			while (($data = fgetcsv($handle, 1000)) !== FALSE) {
 				$iteration++;
 				if ($iteration === 1) continue;
 				$x = Redirect_Migration_Map::init($data[0], $data[1]);
-
-				$x->save();
+				$mappings[] = $x;
 
 			}
+
+			Redirect_Migration_Map::batch($mappings);
+
 			fclose($handle);
 
 		} else {

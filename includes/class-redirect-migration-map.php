@@ -163,6 +163,37 @@ class Redirect_Migration_Map {
 
 	}
 
+	public static function batch( $array ) {
+		global $wpdb;
+
+		$table_name = self::tablename();
+
+		$sql = "
+		
+			INSERT INTO $table_name
+			(time, url_from, url_to, active, status)
+			VALUES
+		";
+
+		$values = array();
+
+		foreach($array as $mapping) {
+			if (!($mapping instanceof self)) continue;
+			$values[] = $wpdb->prepare( "(%s, %s, %s, %d, %d )",
+				current_time( 'mysql' ),
+				self::normalizeUrl($mapping->from),
+				$mapping->to,
+				1,
+				$mapping->status );
+		}
+
+		$sql .= implode(",\n", $values);
+
+		$wpdb->query($sql);
+
+		
+	}
+
   private static function getURLEntry($url) {
     global $wpdb;
 
