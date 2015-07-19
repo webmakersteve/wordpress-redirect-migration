@@ -169,7 +169,7 @@ class Redirect_Migration_Map {
 		$table_name = self::tablename();
 
 		$sql = "
-		
+
 			INSERT INTO $table_name
 			(time, url_from, url_to, active, status)
 			VALUES
@@ -191,7 +191,7 @@ class Redirect_Migration_Map {
 
 		$wpdb->query($sql);
 
-		
+
 	}
 
   private static function getURLEntry($url) {
@@ -211,5 +211,18 @@ class Redirect_Migration_Map {
     );
 
   }
+
+	public static function defaultRedirect($request_uri) {
+
+		$data = array(
+			'id' => 0,
+			'url_to' => 'https://www.ebayinc.com/' . $request_uri,
+			'status' => 302,
+			'active' => true,
+			'url_from' => '*'
+		)
+		return new self($data);
+
+	}
 
 }
