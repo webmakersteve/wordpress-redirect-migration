@@ -42,8 +42,8 @@ class Redirect_Migration_Activator {
 		  id mediumint(9) NOT NULL AUTO_INCREMENT,
 		  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 			status integer(3) DEFAULT 301 NOT NULL,
-		  url_from varchar(55) DEFAULT '' NOT NULL,
-			url_to varchar(55) DEFAULT '' NOT NULL,
+		  url_from varchar(500) DEFAULT '' NOT NULL,
+			url_to varchar(500) DEFAULT '' NOT NULL,
 			active boolean DEFAULT 1 NOT NULL,
 		  UNIQUE KEY id (id)
 		) $charset_collate;";

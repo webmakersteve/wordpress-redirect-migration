@@ -216,11 +216,12 @@ class Redirect_Migration_Map {
 
 		$data = array(
 			'id' => 0,
-			'url_to' => 'https://www.ebayinc.com/' . $request_uri,
+			'url_to' => 'https://www.ebayinc.com/stories/news' . self::normalizeUrl($request_uri),
 			'status' => 302,
 			'active' => true,
 			'url_from' => '*'
-		)
+		);
+
 		return new self($data);
 
 	}

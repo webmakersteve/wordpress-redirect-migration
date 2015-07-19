@@ -149,6 +149,7 @@ class Redirect_Migration_Admin {
 			while (($data = fgetcsv($handle, 1000)) !== FALSE) {
 				$iteration++;
 				if ($iteration === 1) continue;
+				if (empty($data[0]) || empty($data[1])) continue;
 				$x = Redirect_Migration_Map::init($data[0], $data[1]);
 				$mappings[] = $x;
 
@@ -162,7 +163,7 @@ class Redirect_Migration_Admin {
 			throw new Redirect_Migration_Error('File cannot be read');
 			return;
 		}
-		
+
 	}
 
 	protected function getFormAction() {
@@ -183,7 +184,7 @@ class Redirect_Migration_Admin {
 
 	public function create_admin_page() {
 		$maps = Redirect_Migration_Map::all();
-		
+
 		include('partials/redirect-migration-admin-display.php');
 	}
 

@@ -106,7 +106,7 @@ class Redirect_Migration_Public {
 		if ($map instanceof Redirect_Migration_Map) {
 			$map->render();
 		} else {
-			Redirect_Migration_Map::defaultRedirect()->render();
+			Redirect_Migration_Map::defaultRedirect($uri)->render();
 		}
 	}
 
